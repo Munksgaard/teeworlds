@@ -106,6 +106,7 @@ protected:
 
 	// info
 	int m_GameFlags;
+	bool m_Instagib;
 	const char *m_pGameType;
 	struct CGameInfo
 	{
@@ -192,6 +193,9 @@ public:
 	
 	const char *GetGameType() const { return m_pGameType; }
 	
+        void MakeInstagib(char *gametype);
+        bool IsInstagib() const;
+
 	// map
 	void ChangeMap(const char *pToMap);
 

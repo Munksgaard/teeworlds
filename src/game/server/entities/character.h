@@ -41,6 +41,10 @@ public:
 	void Die(int Killer, int Weapon);
 	bool TakeDamage(vec2 Force, int Dmg, int From, int Weapon);
 
+        void SpreeAdd();
+        void SpreeEnd(int Killer);
+        bool OnSpree();
+
 	bool Spawn(class CPlayer *pPlayer, vec2 Pos);
 	bool Remove();
 
@@ -106,6 +110,8 @@ private:
 	int m_Armor;
 
 	int m_TriggeredEvents;
+
+        int m_Spree;
 
 	// ninja
 	struct

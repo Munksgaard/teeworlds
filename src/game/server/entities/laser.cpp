@@ -1,9 +1,11 @@
 /* (c) Magnus Auvinen. See licence.txt in the root of the distribution for more information. */
 /* If you are missing that file, acquire a complete release at teeworlds.com.                */
 #include <game/server/gamecontext.h>
+#include <engine/shared/config.h>
 
 #include "character.h"
 #include "laser.h"
+#include <game/server/player.h>
 
 CLaser::CLaser(CGameWorld *pGameWorld, vec2 Pos, vec2 Direction, float StartEnergy, int Owner)
 : CEntity(pGameWorld, CGameWorld::ENTTYPE_LASER)
@@ -66,6 +68,9 @@ void CLaser::DoBounce()
 
 			if(m_Bounces > GameServer()->Tuning()->m_LaserBounceNum)
 				m_Energy = -1;
+
+                        if (m_Bounces == 1 && g_Config.m_SvLaserjumps)
+                          GameServer()->CreateExplosion(m_Pos, m_Owner, WEAPON_GAME, false);
 
 			GameServer()->CreateSound(m_Pos, SOUND_LASER_BOUNCE);
 		}

@@ -1357,7 +1357,16 @@ void CGameContext::OnInit()
 	m_Collision.Init(&m_Layers);
 
 	// select gametype
-	if(str_comp_nocase(g_Config.m_SvGametype, "mod") == 0)
+	if (str_comp(g_Config.m_SvGametype, "ictf") == 0) {
+		m_pController = new CGameControllerCTF(this);
+		m_pController->MakeInstagib("iCTF");
+	} else if (str_comp(g_Config.m_SvGametype, "itdm") == 0) {
+		m_pController = new CGameControllerTDM(this);
+		m_pController->MakeInstagib("iTDM");
+	} else if (str_comp(g_Config.m_SvGametype, "idm") == 0) {
+		m_pController = new CGameControllerDM(this);
+		m_pController->MakeInstagib("iDM");
+	} else if(str_comp(g_Config.m_SvGametype, "mod") == 0)
 		m_pController = new CGameControllerMOD(this);
 	else if(str_comp_nocase(g_Config.m_SvGametype, "ctf") == 0)
 		m_pController = new CGameControllerCTF(this);
