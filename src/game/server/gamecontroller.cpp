@@ -28,6 +28,7 @@ IGameController::IGameController(CGameContext *pGameServer)
 	m_MatchCount = 0;
 	m_RoundCount = 0;
 	m_SuddenDeath = 0;
+        m_Instagib = false;
 	m_aTeamscore[TEAM_RED] = 0;
 	m_aTeamscore[TEAM_BLUE] = 0;
 	if(g_Config.m_SvWarmup)
@@ -235,7 +236,10 @@ int IGameController::OnCharacterDeath(CCharacter *pVictim, CPlayer *pKiller, int
 
 void IGameController::OnCharacterSpawn(CCharacter *pChr)
 {
-	if(m_GameFlags&GAMEFLAG_SURVIVAL)
+	if (IsInstagib()) {
+	pChr->GiveWeapon(WEAPON_LASER, -1);
+	}
+	else if(m_GameFlags&GAMEFLAG_SURVIVAL)
 	{
 		// give start equipment
 		pChr->IncreaseHealth(10);
@@ -307,7 +311,7 @@ bool IGameController::OnEntity(int Index, vec2 Pos)
 			Type = PICKUP_NINJA;
 	}
 
-	if(Type != -1)
+	if(Type != -1 && !IsInstagib())
 	{
 		new CPickup(&GameServer()->m_World, Type, Pos);
 		return true;
@@ -1149,4 +1153,13 @@ int IGameController::GetStartTeam()
 		return Team;
 	}
 	return TEAM_SPECTATORS;
+}
+
+void IGameController::MakeInstagib(char *NewGameType) {
+  m_Instagib = true;
+  m_pGameType = NewGameType;
+}
+
+bool IGameController::IsInstagib() const {
+  return m_Instagib;
 }
